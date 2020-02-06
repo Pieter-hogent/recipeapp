@@ -3,6 +3,6 @@
 Ingredients:
 <ul>
 	<li *ngFor="let ingredient of ingredients">
-		{{ ingredient }}
+		<app-ingredient [name]="ingredient"></app-ingredient>
 	</li>
 </ul>

@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { RecipeComponent } from './recipe/recipe.component';
+import { IngredientComponent } from './ingredient/ingredient.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    RecipeComponent
+    RecipeComponent,
+    IngredientComponent
   ],
   imports: [
     BrowserModule
