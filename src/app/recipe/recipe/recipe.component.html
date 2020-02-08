@@ -1,8 +1,18 @@
-<p>recipe for {{ name }} added on {{ dateAdded | date: 'longDate' }}</p>
-
-Ingredients:
-<ul>
-	<li *ngFor="let ingredient of ingredients">
-		<app-ingredient [name]="ingredient"></app-ingredient>
-	</li>
-</ul>
+<mat-card>
+	<mat-card-header>
+		<mat-card-title
+			><mat-icon>local_dining</mat-icon> {{ name }}
+		</mat-card-title>
+		<mat-card-subtitle
+			>added on {{ dateAdded | date: longDate }}</mat-card-subtitle
+		>
+	</mat-card-header>
+	<mat-card-content>
+		<h3 mat-subheader>ingredients</h3>
+		<mat-list>
+			<mat-list-item *ngFor="let ingredient of ingredients">
+				<app-ingredient [name]="ingredient"></app-ingredient>
+			</mat-list-item>
+		</mat-list>
+	</mat-card-content>
+</mat-card>
