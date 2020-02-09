@@ -1,0 +1,17 @@
+<div fxLayout="column" fxLayoutGap="2%">
+  <div
+    fxLayout="row wrap"
+    fxLayout.xs="column"
+    fxLayoutGap="0.5%"
+    fxLayoutAlign="start"
+  >
+    <div
+      class="recipe"
+      *ngFor="let recipe of recipes"
+      fxFlex="0 0 calc(25%-0.5%)"
+      fxFlex.xs="100%"
+    >
+      <app-recipe [recipe]="recipe" data-cy="recipeCard"></app-recipe>
+    </div>
+  </div>
+</div>
