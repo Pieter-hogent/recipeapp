@@ -14,7 +14,5 @@ export class RecipeListComponent implements OnInit {
     return this._recipes;
   }
 
-  ngOnInit(): void {
-    console.log(this.recipes);
-  }
+  ngOnInit(): void {}
 }
