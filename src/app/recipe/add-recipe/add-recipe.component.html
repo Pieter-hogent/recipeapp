@@ -1,0 +1,8 @@
+<mat-card>
+  <mat-form-field>
+    <input matInput placeholder="name" type="text" #newrecipename />
+  </mat-form-field>
+  <button (click)="addRecipe(newrecipename)" mat-raised-button>
+    add recipe
+  </button>
+</mat-card>
