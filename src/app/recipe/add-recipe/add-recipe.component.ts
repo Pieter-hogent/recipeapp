@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Recipe } from '../recipe.model';
 
 @Component({
   selector: 'app-add-recipe',
@@ -6,12 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./add-recipe.component.css']
 })
 export class AddRecipeComponent implements OnInit {
+  @Output() public newRecipe = new EventEmitter<Recipe>();
   constructor() {}
 
   ngOnInit() {}
 
   addRecipe(recipeName: HTMLInputElement): boolean {
-    console.log(recipeName.value);
+    const recipe = new Recipe(recipeName.value, []);
+    this.newRecipe.emit(recipe);
     return false;
   }
 }

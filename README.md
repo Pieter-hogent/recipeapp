@@ -6,4 +6,4 @@ when the slides mention a commit hash you can always branch this repo and follow
 
     ~$ git clone https://github.com/Pieter-hogent/recipeapp.git
     ~$ cd recipeapp
-    ~$recipeapp/ git checkout -b mybranch bb3d916
+    ~/recipeapp$ git checkout -b mybranch bb3d916
