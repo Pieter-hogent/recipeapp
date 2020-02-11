@@ -1,5 +1,13 @@
 <div fxLayout="column" fxLayoutGap="2%">
   <app-add-recipe (newRecipe)="addNewRecipe($event)"></app-add-recipe>
+  <mat-card>
+    <mat-form-field>
+      <input matInput placeholder="filter" type="text" #filter />
+    </mat-form-field>
+    <button (click)="applyFilter(filter.value)" mat-raised-button>
+      filter
+    </button>
+  </mat-card>
   <div
     fxLayout="row wrap"
     fxLayout.xs="column"
@@ -8,7 +16,7 @@
   >
     <div
       class="recipe"
-      *ngFor="let recipe of recipes"
+      *ngFor="let recipe of recipes | recipeFilter: filterRecipeName"
       fxFlex="0 0 calc(25%-0.5%)"
       fxFlex.xs="100%"
     >
