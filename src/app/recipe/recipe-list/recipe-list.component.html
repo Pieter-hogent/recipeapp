@@ -2,11 +2,13 @@
   <app-add-recipe (newRecipe)="addNewRecipe($event)"></app-add-recipe>
   <mat-card>
     <mat-form-field>
-      <input matInput placeholder="filter" type="text" #filter />
+      <input
+        matInput
+        (keyup)="filterRecipe$.next($event.target.value)"
+        placeholder="filter"
+        type="text"
+      />
     </mat-form-field>
-    <button (click)="applyFilter(filter.value)" mat-raised-button>
-      filter
-    </button>
   </mat-card>
   <div
     fxLayout="row wrap"
