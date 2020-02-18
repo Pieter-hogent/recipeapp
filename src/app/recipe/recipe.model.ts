@@ -1,21 +1,27 @@
+import { Ingredient, IngredientJson } from './ingredient.model';
+
 interface RecipeJson {
   name: string;
-  ingredients: string[];
+  ingredients: IngredientJson[];
   created: string;
 }
 export class Recipe {
   constructor(
     private _name: string,
-    private _ingredients = new Array<string>(),
+    private _ingredients = new Array<Ingredient>(),
     private _dateAdded = new Date()
   ) {}
 
   static fromJSON(json: RecipeJson): Recipe {
-    const rec = new Recipe(json.name, json.ingredients, new Date(json.created));
+    const rec = new Recipe(
+      json.name,
+      json.ingredients.map(Ingredient.fromJSON),
+      new Date(json.created)
+    );
     return rec;
   }
 
-  get ingredients(): string[] {
+  get ingredients(): Ingredient[] {
     return this._ingredients;
   }
 
@@ -28,6 +34,6 @@ export class Recipe {
   }
 
   addIngredient(name: string, amount?: number, unit?: string) {
-    this._ingredients.push(`${amount || 1} ${unit || ''} ${name}`);
+    this._ingredients.push(new Ingredient(name, amount, unit));
   }
 }
