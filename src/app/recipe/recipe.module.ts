@@ -6,10 +6,17 @@ import { CommonModule } from '@angular/common';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
 import { AddRecipeComponent } from './add-recipe/add-recipe.component';
 import { RecipeFilterPipe } from './recipe-filter.pipe';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  declarations: [RecipeComponent, IngredientComponent, RecipeListComponent, AddRecipeComponent, RecipeFilterPipe],
-  imports: [CommonModule, MaterialModule],
+  declarations: [
+    RecipeComponent,
+    IngredientComponent,
+    RecipeListComponent,
+    AddRecipeComponent,
+    RecipeFilterPipe
+  ],
+  imports: [CommonModule, HttpClientModule, MaterialModule],
   exports: [RecipeListComponent]
 })
 export class RecipeModule {}

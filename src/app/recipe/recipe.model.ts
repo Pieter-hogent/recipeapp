@@ -1,7 +1,7 @@
 interface RecipeJson {
   name: string;
   ingredients: string[];
-  dateAdded: string;
+  created: string;
 }
 export class Recipe {
   constructor(
@@ -11,11 +11,7 @@ export class Recipe {
   ) {}
 
   static fromJSON(json: RecipeJson): Recipe {
-    const rec = new Recipe(
-      json.name,
-      json.ingredients,
-      new Date(json.dateAdded)
-    );
+    const rec = new Recipe(json.name, json.ingredients, new Date(json.created));
     return rec;
   }
 

@@ -1,18 +1,22 @@
 import { Injectable } from '@angular/core';
-import { RECIPES } from './mock-recipes';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 import { Recipe } from './recipe.model';
+import { Observable, pipe } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeDataService {
-  private _recipes = RECIPES;
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  get recipes() {
-    return this._recipes;
+  get recipes$(): Observable<Recipe[]> {
+    return this.http
+      .get(`${environment.apiUrl}/recipes/`)
+      .pipe(map((list: any[]): Recipe[] => list.map(Recipe.fromJSON)));
   }
   addNewRecipe(recipe: Recipe) {
-    this._recipes = [...this._recipes, recipe];
+    throw 'not implemented yet';
   }
 }

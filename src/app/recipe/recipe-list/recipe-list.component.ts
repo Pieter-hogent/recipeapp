@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Recipe } from '../recipe.model';
 import { RecipeDataService } from '../recipe-data.service';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import {
   distinctUntilChanged,
   debounceTime,
@@ -17,6 +17,8 @@ import {
 export class RecipeListComponent {
   public filterRecipeName: string;
   public filterRecipe$ = new Subject<string>();
+  private _fetchRecipes$: Observable<Recipe[]> = this._recipeDataService
+    .recipes$;
 
   constructor(private _recipeDataService: RecipeDataService) {
     this.filterRecipe$
@@ -32,8 +34,8 @@ export class RecipeListComponent {
     this.filterRecipeName = filter;
   }
 
-  get recipes(): Recipe[] {
-    return this._recipeDataService.recipes;
+  get recipes$(): Observable<Recipe[]> {
+    return this._fetchRecipes$;
   }
 
   addNewRecipe(recipe) {

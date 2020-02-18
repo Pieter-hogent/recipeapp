@@ -18,7 +18,7 @@
   >
     <div
       class="recipe"
-      *ngFor="let recipe of recipes | recipeFilter: filterRecipeName"
+      *ngFor="let recipe of recipes$ | async | recipeFilter: filterRecipeName"
       fxFlex="0 0 calc(25%-0.5%)"
       fxFlex.xs="100%"
     >
