@@ -10,19 +10,22 @@
       />
     </mat-form-field>
   </mat-card>
-  <div
-    fxLayout="row wrap"
-    fxLayout.xs="column"
-    fxLayoutGap="0.5%"
-    fxLayoutAlign="start"
-  >
+  <div *ngIf="recipes$ | async as recipes; else loading">
     <div
-      class="recipe"
-      *ngFor="let recipe of recipes$ | async | recipeFilter: filterRecipeName"
-      fxFlex="0 0 calc(25%-0.5%)"
-      fxFlex.xs="100%"
+      fxLayout="row wrap"
+      fxLayout.xs="column"
+      fxLayoutGap="0.5%"
+      fxLayoutAlign="start"
     >
-      <app-recipe [recipe]="recipe" data-cy="recipeCard"></app-recipe>
+      <div
+        class="recipe"
+        *ngFor="let recipe of recipes | recipeFilter: filterRecipeName"
+        fxFlex="0 0 calc(25%-0.5%)"
+        fxFlex.xs="100%"
+      >
+        <app-recipe [recipe]="recipe" data-cy="recipeCard"></app-recipe>
+      </div>
     </div>
   </div>
+  <ng-template #loading><mat-spinner></mat-spinner></ng-template>
 </div>
