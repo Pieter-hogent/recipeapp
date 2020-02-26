@@ -1,11 +1,13 @@
 import { Ingredient, IngredientJson } from './ingredient.model';
 
 interface RecipeJson {
+  id: number;
   name: string;
   ingredients: IngredientJson[];
   created: string;
 }
 export class Recipe {
+  private _id: number;
   constructor(
     private _name: string,
     private _ingredients = new Array<Ingredient>(),
@@ -18,6 +20,7 @@ export class Recipe {
       json.ingredients.map(Ingredient.fromJSON),
       new Date(json.created)
     );
+    rec._id = json.id;
     return rec;
   }
 
@@ -28,7 +31,9 @@ export class Recipe {
       created: this.dateAdded.toString()
     };
   }
-
+  get id(): number {
+    return this._id;
+  }
   get ingredients(): Ingredient[] {
     return this._ingredients;
   }

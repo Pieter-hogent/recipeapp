@@ -1,3 +1,4 @@
+import { RecipeDataService } from './../recipe-data.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { Recipe } from '../recipe.model';
 
@@ -9,7 +10,11 @@ import { Recipe } from '../recipe.model';
 export class RecipeComponent implements OnInit {
   @Input() public recipe: Recipe;
 
-  constructor() {}
+  constructor(private _recipeDataService: RecipeDataService) {}
 
   ngOnInit() {}
+
+  deleteRecipe() {
+    this._recipeDataService.deleteRecipe(this.recipe);
+  }
 }

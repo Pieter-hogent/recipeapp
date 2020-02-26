@@ -1,19 +1,18 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { map, catchError, scan, tap, shareReplay } from 'rxjs/operators';
+import { map, catchError, tap, shareReplay, switchMap } from 'rxjs/operators';
 import { Recipe } from './recipe.model';
-import { Observable, pipe, EMPTY, throwError, Subject, merge } from 'rxjs';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeDataService {
-  private _addedRecipes$ = new Subject<Recipe>();
-  private _allRecipes$: Observable<Recipe[]> = merge(
-    this.recipes$,
-    this._addedRecipes$
-  ).pipe(scan((acc: Recipe[], value: Recipe) => [...acc, value]));
+  private _reloadRecipes$ = new BehaviorSubject<boolean>(true);
+  private _allRecipes$ = this._reloadRecipes$.pipe(
+    switchMap(() => this.recipes$)
+  );
 
   constructor(private http: HttpClient) {}
 
@@ -29,6 +28,7 @@ export class RecipeDataService {
       map((list: any[]): Recipe[] => list.map(Recipe.fromJSON))
     );
   }
+
   addNewRecipe(recipe: Recipe) {
     return this.http
       .post(`${environment.apiUrl}/recipes/`, recipe.toJSON())
@@ -37,7 +37,16 @@ export class RecipeDataService {
         catchError(this.handleError),
         map(Recipe.fromJSON)
       )
-      .subscribe((rec: Recipe) => this._addedRecipes$.next(rec));
+      .subscribe((rec: Recipe) => {
+        this._reloadRecipes$.next(true);
+      });
+  }
+
+  deleteRecipe(recipe: Recipe) {
+    return this.http
+      .delete(`${environment.apiUrl}/recipes/${recipe.id}`)
+      .pipe(tap(console.log), catchError(this.handleError))
+      .subscribe(() => this._reloadRecipes$.next(true));
   }
 
   handleError(err: any): Observable<never> {
