@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Recipe } from '../recipe.model';
 import { RecipeDataService } from '../recipe-data.service';
-import { Subject, Observable, of, EMPTY } from 'rxjs';
+import { Subject, Observable, of, EMPTY, merge } from 'rxjs';
 import {
   distinctUntilChanged,
   debounceTime,
   map,
   filter,
-  catchError
+  catchError,
+  scan
 } from 'rxjs/operators';
 
 @Component({
@@ -19,6 +20,7 @@ export class RecipeListComponent implements OnInit {
   public filterRecipeName: string;
   public filterRecipe$ = new Subject<string>();
   private _fetchRecipes$: Observable<Recipe[]>;
+
   public errorMessage: string = '';
 
   constructor(private _recipeDataService: RecipeDataService) {
@@ -32,7 +34,7 @@ export class RecipeListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._fetchRecipes$ = this._recipeDataService.recipes$.pipe(
+    this._fetchRecipes$ = this._recipeDataService.allRecipes$.pipe(
       catchError(err => {
         this.errorMessage = err;
         return EMPTY;
@@ -49,8 +51,6 @@ export class RecipeListComponent implements OnInit {
   }
 
   addNewRecipe(recipe) {
-    this._recipeDataService
-      .addNewRecipe(recipe)
-      .subscribe((rec: Recipe) => console.log(rec));
+    this._recipeDataService.addNewRecipe(recipe);
   }
 }

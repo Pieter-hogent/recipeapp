@@ -1,15 +1,25 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, scan } from 'rxjs/operators';
 import { Recipe } from './recipe.model';
-import { Observable, pipe, EMPTY, throwError } from 'rxjs';
+import { Observable, pipe, EMPTY, throwError, Subject, merge } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeDataService {
+  private _addedRecipes$ = new Subject<Recipe>();
+  private _allRecipes$: Observable<Recipe[]> = merge(
+    this.recipes$,
+    this._addedRecipes$
+  ).pipe(scan((acc: Recipe[], value: Recipe) => [...acc, value]));
+
   constructor(private http: HttpClient) {}
+
+  get allRecipes$(): Observable<Recipe[]> {
+    return this._allRecipes$;
+  }
 
   get recipes$(): Observable<Recipe[]> {
     return this.http.get(`${environment.apiUrl}/recipes/`).pipe(
@@ -17,10 +27,11 @@ export class RecipeDataService {
       map((list: any[]): Recipe[] => list.map(Recipe.fromJSON))
     );
   }
-  addNewRecipe(recipe: Recipe): Observable<Recipe> {
+  addNewRecipe(recipe: Recipe) {
     return this.http
       .post(`${environment.apiUrl}/recipes/`, recipe.toJSON())
-      .pipe(catchError(this.handleError), map(Recipe.fromJSON));
+      .pipe(catchError(this.handleError), map(Recipe.fromJSON))
+      .subscribe((rec: Recipe) => this._addedRecipes$.next(rec));
   }
 
   handleError(err: any): Observable<never> {
