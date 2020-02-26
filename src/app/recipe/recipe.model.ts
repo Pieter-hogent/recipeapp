@@ -21,6 +21,14 @@ export class Recipe {
     return rec;
   }
 
+  toJSON(): RecipeJson {
+    return <RecipeJson>{
+      name: this.name,
+      ingredients: this.ingredients.map(ing => ing.toJSON()),
+      created: this.dateAdded.toString()
+    };
+  }
+
   get ingredients(): Ingredient[] {
     return this._ingredients;
   }

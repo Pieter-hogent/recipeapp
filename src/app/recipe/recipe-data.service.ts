@@ -17,8 +17,10 @@ export class RecipeDataService {
       map((list: any[]): Recipe[] => list.map(Recipe.fromJSON))
     );
   }
-  addNewRecipe(recipe: Recipe) {
-    throw 'not implemented yet';
+  addNewRecipe(recipe: Recipe): Observable<Recipe> {
+    return this.http
+      .post(`${environment.apiUrl}/recipes/`, recipe.toJSON())
+      .pipe(catchError(this.handleError), map(Recipe.fromJSON));
   }
 
   handleError(err: any): Observable<never> {

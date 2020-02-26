@@ -49,6 +49,8 @@ export class RecipeListComponent implements OnInit {
   }
 
   addNewRecipe(recipe) {
-    this._recipeDataService.addNewRecipe(recipe);
+    this._recipeDataService
+      .addNewRecipe(recipe)
+      .subscribe((rec: Recipe) => console.log(rec));
   }
 }
