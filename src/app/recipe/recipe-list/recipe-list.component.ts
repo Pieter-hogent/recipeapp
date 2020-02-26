@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Recipe } from '../recipe.model';
 import { RecipeDataService } from '../recipe-data.service';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, of, EMPTY } from 'rxjs';
 import {
   distinctUntilChanged,
   debounceTime,
   map,
-  filter
+  filter,
+  catchError
 } from 'rxjs/operators';
 
 @Component({
@@ -14,11 +15,11 @@ import {
   templateUrl: './recipe-list.component.html',
   styleUrls: ['./recipe-list.component.css']
 })
-export class RecipeListComponent {
+export class RecipeListComponent implements OnInit {
   public filterRecipeName: string;
   public filterRecipe$ = new Subject<string>();
-  private _fetchRecipes$: Observable<Recipe[]> = this._recipeDataService
-    .recipes$;
+  private _fetchRecipes$: Observable<Recipe[]>;
+  public errorMessage: string = '';
 
   constructor(private _recipeDataService: RecipeDataService) {
     this.filterRecipe$
@@ -28,6 +29,15 @@ export class RecipeListComponent {
         map(val => val.toLowerCase())
       )
       .subscribe(val => (this.filterRecipeName = val));
+  }
+
+  ngOnInit(): void {
+    this._fetchRecipes$ = this._recipeDataService.recipes$.pipe(
+      catchError(err => {
+        this.errorMessage = err;
+        return EMPTY;
+      })
+    );
   }
 
   applyFilter(filter: string) {
