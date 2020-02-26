@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { map, catchError, scan } from 'rxjs/operators';
+import { map, catchError, scan, tap, shareReplay } from 'rxjs/operators';
 import { Recipe } from './recipe.model';
 import { Observable, pipe, EMPTY, throwError, Subject, merge } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -23,6 +23,8 @@ export class RecipeDataService {
 
   get recipes$(): Observable<Recipe[]> {
     return this.http.get(`${environment.apiUrl}/recipes/`).pipe(
+      tap(console.log),
+      shareReplay(1),
       catchError(this.handleError),
       map((list: any[]): Recipe[] => list.map(Recipe.fromJSON))
     );
@@ -30,7 +32,11 @@ export class RecipeDataService {
   addNewRecipe(recipe: Recipe) {
     return this.http
       .post(`${environment.apiUrl}/recipes/`, recipe.toJSON())
-      .pipe(catchError(this.handleError), map(Recipe.fromJSON))
+      .pipe(
+        tap(console.log),
+        catchError(this.handleError),
+        map(Recipe.fromJSON)
+      )
       .subscribe((rec: Recipe) => this._addedRecipes$.next(rec));
   }
 
