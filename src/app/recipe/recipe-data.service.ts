@@ -2,22 +2,25 @@ import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError, tap, shareReplay, switchMap } from 'rxjs/operators';
 import { Recipe } from './recipe.model';
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeDataService {
-  private _reloadRecipes$ = new BehaviorSubject<boolean>(true);
-  private _allRecipes$ = this._reloadRecipes$.pipe(
-    switchMap(() => this.recipes$)
-  );
+  private _recipes$ = new BehaviorSubject<Recipe[]>([]);
+  private _recipes: Recipe[];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.recipes$.subscribe((recipes: Recipe[]) => {
+      this._recipes = recipes;
+      this._recipes$.next(this._recipes);
+    });
+  }
 
   get allRecipes$(): Observable<Recipe[]> {
-    return this._allRecipes$;
+    return this._recipes$;
   }
 
   get recipes$(): Observable<Recipe[]> {
@@ -38,7 +41,8 @@ export class RecipeDataService {
         map(Recipe.fromJSON)
       )
       .subscribe((rec: Recipe) => {
-        this._reloadRecipes$.next(true);
+        this._recipes = [...this._recipes, rec];
+        this._recipes$.next(this._recipes);
       });
   }
 
@@ -46,7 +50,10 @@ export class RecipeDataService {
     return this.http
       .delete(`${environment.apiUrl}/recipes/${recipe.id}`)
       .pipe(tap(console.log), catchError(this.handleError))
-      .subscribe(() => this._reloadRecipes$.next(true));
+      .subscribe(() => {
+        this._recipes = this._recipes.filter(rec => rec.id != recipe.id);
+        this._recipes$.next(this._recipes);
+      });
   }
 
   handleError(err: any): Observable<never> {
