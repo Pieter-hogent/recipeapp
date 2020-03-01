@@ -8,12 +8,15 @@
           placeholder="name"
           type="text"
           formControlName="name"
+          required
+          #spy
         />
       </mat-form-field>
-      <button mat-raised-button type="submit">
+      <button mat-raised-button type="submit" [disabled]="!recipe.valid">
         add recipe
       </button>
     </form>
   </mat-card-content>
 </mat-card>
 REMOVE {{ recipe.value | json }}
+{{ spy.className }}
