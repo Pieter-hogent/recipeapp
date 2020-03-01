@@ -1,8 +1,19 @@
 <mat-card>
-  <mat-form-field>
-    <input matInput placeholder="name" type="text" #newrecipename />
-  </mat-form-field>
-  <button (click)="addRecipe(newrecipename)" mat-raised-button>
-    add recipe
-  </button>
+  <mat-card-content>
+    <form [formGroup]="recipe" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <input
+          matInput
+          aria-label="name"
+          placeholder="name"
+          type="text"
+          formControlName="name"
+        />
+      </mat-form-field>
+      <button mat-raised-button type="submit">
+        add recipe
+      </button>
+    </form>
+  </mat-card-content>
 </mat-card>
+REMOVE {{ recipe.value | json }}

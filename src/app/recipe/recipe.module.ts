@@ -7,6 +7,7 @@ import { RecipeListComponent } from './recipe-list/recipe-list.component';
 import { AddRecipeComponent } from './add-recipe/add-recipe.component';
 import { RecipeFilterPipe } from './recipe-filter.pipe';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,12 @@ import { HttpClientModule } from '@angular/common/http';
     AddRecipeComponent,
     RecipeFilterPipe
   ],
-  imports: [CommonModule, HttpClientModule, MaterialModule],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    MaterialModule,
+    ReactiveFormsModule
+  ],
   exports: [RecipeListComponent]
 })
 export class RecipeModule {}
