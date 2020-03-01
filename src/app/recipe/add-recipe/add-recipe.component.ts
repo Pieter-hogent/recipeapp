@@ -25,4 +25,13 @@ export class AddRecipeComponent implements OnInit {
   onSubmit() {
     this.newRecipe.emit(new Recipe(this.recipe.value.name));
   }
+
+  getErrorMessage(errors: any): string {
+    if (errors.required) {
+      return 'is required';
+    } else if (errors.minlength) {
+      return `needs at least ${errors.minlength.requiredLength} 
+        characters (got ${errors.minlength.actualLength})`;
+    }
+  }
 }

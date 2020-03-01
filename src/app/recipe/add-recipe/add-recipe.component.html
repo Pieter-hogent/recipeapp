@@ -11,6 +11,12 @@
           required
           #spy
         />
+
+        <mat-error
+          *ngIf="recipe.get('name')['errors'] && recipe.get('name').touched"
+        >
+          {{ getErrorMessage(recipe.get('name')['errors']) }}
+        </mat-error>
       </mat-form-field>
       <button mat-raised-button type="submit" [disabled]="!recipe.valid">
         add recipe
@@ -18,5 +24,4 @@
     </form>
   </mat-card-content>
 </mat-card>
-REMOVE {{ recipe.value | json }}
-{{ spy.className }}
+REMOVE {{ recipe.get('name')['errors'] | json }}
