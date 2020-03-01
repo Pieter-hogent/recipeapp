@@ -27,10 +27,11 @@
       </div>
     </div>
   </div>
+  <mat-card class="error" *ngIf="errorMessage">
+    got an error while loading the recipe list: {{ errorMessage }}
+  </mat-card>
   <ng-template #loadingOrError>
-    <mat-card class="error" *ngIf="errorMessage; else loading">
-      got an error while loading the recipe list: {{ errorMessage }}
-    </mat-card>
+    <span *ngIf="errorMessage; else loading"></span>
     <ng-template #loading>
       <mat-spinner></mat-spinner>
     </ng-template>

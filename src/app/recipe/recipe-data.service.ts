@@ -13,10 +13,18 @@ export class RecipeDataService {
   private _recipes: Recipe[];
 
   constructor(private http: HttpClient) {
-    this.recipes$.subscribe((recipes: Recipe[]) => {
-      this._recipes = recipes;
-      this._recipes$.next(this._recipes);
-    });
+    this.recipes$
+      .pipe(
+        catchError(err => {
+          console.log('error got here');
+          this._recipes$.error(err);
+          return throwError(err);
+        })
+      )
+      .subscribe((recipes: Recipe[]) => {
+        this._recipes = recipes;
+        this._recipes$.next(this._recipes);
+      });
   }
 
   get allRecipes$(): Observable<Recipe[]> {
@@ -65,7 +73,6 @@ export class RecipeDataService {
     } else {
       errorMessage = err;
     }
-    console.error(err);
     return throwError(errorMessage);
   }
 }
