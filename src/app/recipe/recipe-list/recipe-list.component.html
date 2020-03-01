@@ -10,6 +10,9 @@
       />
     </mat-form-field>
   </mat-card>
+  <mat-card class="error" *ngIf="errorMessage">
+    got an error while loading the recipe list: {{ errorMessage }}
+  </mat-card>
   <div *ngIf="recipes$ | async as recipes; else loadingOrError">
     <div
       fxLayout="row wrap"
@@ -27,9 +30,7 @@
       </div>
     </div>
   </div>
-  <mat-card class="error" *ngIf="errorMessage">
-    got an error while loading the recipe list: {{ errorMessage }}
-  </mat-card>
+
   <ng-template #loadingOrError>
     <span *ngIf="errorMessage; else loading"></span>
     <ng-template #loading>

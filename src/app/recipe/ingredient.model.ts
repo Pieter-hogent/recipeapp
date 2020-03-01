@@ -11,7 +11,9 @@ export class Ingredient {
   ) {}
 
   static fromJSON(json: IngredientJson): Ingredient {
-    const ing = new Ingredient(json.name, json.amount, json.unit);
+    const amount =
+      typeof json.amount === 'string' ? parseInt(json.amount) : json.amount;
+    const ing = new Ingredient(json.name, amount, json.unit);
     return ing;
   }
 

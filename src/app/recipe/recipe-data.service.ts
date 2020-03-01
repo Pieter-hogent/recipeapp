@@ -16,7 +16,7 @@ export class RecipeDataService {
     this.recipes$
       .pipe(
         catchError(err => {
-          console.log('error got here');
+          // temporary fix, while we use the behaviorsubject as a cache stream
           this._recipes$.error(err);
           return throwError(err);
         })
@@ -48,6 +48,13 @@ export class RecipeDataService {
         catchError(this.handleError),
         map(Recipe.fromJSON)
       )
+      .pipe(
+        // temporary fix, while we use the behaviorsubject as a cache stream
+        catchError(err => {
+          this._recipes$.error(err);
+          return throwError(err);
+        })
+      )
       .subscribe((rec: Recipe) => {
         this._recipes = [...this._recipes, rec];
         this._recipes$.next(this._recipes);
@@ -69,6 +76,7 @@ export class RecipeDataService {
     if (err.error instanceof ErrorEvent) {
       errorMessage = `An error occurred: ${err.error.message}`;
     } else if (err instanceof HttpErrorResponse) {
+      console.log(err);
       errorMessage = `'${err.status} ${err.statusText}' when accessing '${err.url}'`;
     } else {
       errorMessage = err;

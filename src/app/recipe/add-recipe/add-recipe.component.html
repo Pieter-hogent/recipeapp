@@ -18,6 +18,45 @@
           {{ getErrorMessage(recipe.get('name')['errors']) }}
         </mat-error>
       </mat-form-field>
+      <div
+        formArrayName="ingredients"
+        *ngFor="
+          let item of recipe.get('ingredients')['controls'];
+          let i = index
+        "
+      >
+        <div [formGroupName]="i">
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              aria-label="ingredient amount"
+              placeholder="amount"
+              formControlName="amount"
+            />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-select
+              placeholder="unit"
+              aria-label="ingredient unit"
+              formControlName="unit"
+            >
+              <mat-option *ngFor="let type of unitTypes" [value]="type">
+                {{ type }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="name"
+              aria-label="ingredient name"
+              type="text"
+              formControlName="name"
+            />
+          </mat-form-field>
+        </div>
+      </div>
       <button mat-raised-button type="submit" [disabled]="!recipe.valid">
         add recipe
       </button>
