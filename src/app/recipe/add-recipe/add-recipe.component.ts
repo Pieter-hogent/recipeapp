@@ -10,6 +10,16 @@ import {
 import { Ingredient } from '../ingredient.model';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
+function validateIngredientName(control: FormGroup): { [key: string]: any } {
+  if (
+    control.get('amount').value.length >= 1 &&
+    control.get('name').value.length < 2
+  ) {
+    return { amountNoName: true };
+  }
+  return null;
+}
+
 @Component({
   selector: 'app-add-recipe',
   templateUrl: './add-recipe.component.html',
@@ -55,24 +65,36 @@ export class AddRecipeComponent implements OnInit {
   }
 
   createIngredients(): FormGroup {
-    return this.fb.group({
-      amount: [''],
-      unit: [''],
-      name: ['', [Validators.required, Validators.minLength(3)]]
-    });
+    return this.fb.group(
+      {
+        amount: [''],
+        unit: [''],
+        name: ['']
+      },
+      { validator: validateIngredientName }
+    );
   }
   onSubmit() {
     let ingredients = this.recipe.value.ingredients.map(Ingredient.fromJSON);
     ingredients = ingredients.filter(ing => ing.name.length > 2);
     this.newRecipe.emit(new Recipe(this.recipe.value.name, ingredients));
+
+    this.recipe = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(2)]],
+      ingredients: this.fb.array([this.createIngredients()])
+    });
   }
 
   getErrorMessage(errors: any): string {
+    if (!errors) {
+      return null;
+    }
     if (errors.required) {
       return 'is required';
     } else if (errors.minlength) {
-      return `needs at least ${errors.minlength.requiredLength} 
-        characters (got ${errors.minlength.actualLength})`;
+      return `needs at least ${errors.minlength.requiredLength} characters (got ${errors.minlength.actualLength})`;
+    } else if (errors.amountNoName) {
+      return `if amount is set you must set a name`;
     }
   }
 }
