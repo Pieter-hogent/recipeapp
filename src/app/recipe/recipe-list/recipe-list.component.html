@@ -11,7 +11,7 @@
       />
     </mat-form-field>
   </mat-card>
-  <mat-card class="error" *ngIf="errorMessage">
+  <mat-card class="error" *ngIf="errorMessage" data-cy="appError">
     got an error while loading the recipe list: {{ errorMessage }}
   </mat-card>
   <div *ngIf="recipes$ | async as recipes; else loadingOrError">
