@@ -49,8 +49,4 @@ export class RecipeListComponent implements OnInit {
   get recipes$(): Observable<Recipe[]> {
     return this._fetchRecipes$;
   }
-
-  addNewRecipe(recipe) {
-    this._recipeDataService.addNewRecipe(recipe);
-  }
 }

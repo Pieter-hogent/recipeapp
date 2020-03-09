@@ -1,3 +1,4 @@
+import { RecipeDataService } from './../recipe-data.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Recipe } from '../recipe.model';
 import {
@@ -28,9 +29,11 @@ function validateIngredientName(control: FormGroup): { [key: string]: any } {
 export class AddRecipeComponent implements OnInit {
   public readonly unitTypes = ['Liter', 'Gram', 'Tbsp', 'Pcs'];
   public recipe: FormGroup;
-  @Output() public newRecipe = new EventEmitter<Recipe>();
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private _recipeDataService: RecipeDataService
+  ) {}
 
   get ingredients(): FormArray {
     return <FormArray>this.recipe.get('ingredients');
@@ -77,8 +80,9 @@ export class AddRecipeComponent implements OnInit {
   onSubmit() {
     let ingredients = this.recipe.value.ingredients.map(Ingredient.fromJSON);
     ingredients = ingredients.filter(ing => ing.name.length > 2);
-    this.newRecipe.emit(new Recipe(this.recipe.value.name, ingredients));
-
+    this._recipeDataService.addNewRecipe(
+      new Recipe(this.recipe.value.name, ingredients)
+    );
     this.recipe = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
       ingredients: this.fb.array([this.createIngredients()])

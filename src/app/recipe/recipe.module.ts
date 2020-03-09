@@ -23,6 +23,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     MaterialModule,
     ReactiveFormsModule
   ],
-  exports: [RecipeListComponent]
+  exports: [AddRecipeComponent, RecipeListComponent]
 })
 export class RecipeModule {}
