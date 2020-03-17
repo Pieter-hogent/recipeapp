@@ -8,6 +8,7 @@ import { AddRecipeComponent } from './add-recipe/add-recipe.component';
 import { RecipeFilterPipe } from './recipe-filter.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     IngredientComponent,
     RecipeListComponent,
     AddRecipeComponent,
-    RecipeFilterPipe
+    RecipeFilterPipe,
+    RecipeDetailComponent
   ],
   imports: [
     CommonModule,

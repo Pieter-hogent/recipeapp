@@ -40,6 +40,12 @@ export class RecipeDataService {
     );
   }
 
+  getRecipe$(id: string): Observable<Recipe> {
+    return this.http
+      .get(`${environment.apiUrl}/recipes/${id}`)
+      .pipe(catchError(this.handleError), map(Recipe.fromJSON)); // returns just one recipe, as json
+  }
+
   addNewRecipe(recipe: Recipe) {
     return this.http
       .post(`${environment.apiUrl}/recipes/`, recipe.toJSON())
