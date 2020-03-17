@@ -34,6 +34,7 @@ export class RecipeListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('loading recipe.list');
     this._fetchRecipes$ = this._recipeDataService.allRecipes$.pipe(
       catchError(err => {
         this.errorMessage = err;

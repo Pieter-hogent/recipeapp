@@ -6,17 +6,16 @@ import { CommonModule } from '@angular/common';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
 import { AddRecipeComponent } from './add-recipe/add-recipe.component';
 import { RecipeFilterPipe } from './recipe-filter.pipe';
-import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
 import { RecipeResolver } from './RecipeResolver';
 import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
-  { path: 'recipe/list', component: RecipeListComponent },
-  { path: 'recipe/add', component: AddRecipeComponent },
+  { path: 'list', component: RecipeListComponent },
+  { path: 'add', component: AddRecipeComponent },
   {
-    path: 'recipe/detail/:id',
+    path: 'detail/:id',
     component: RecipeDetailComponent,
     resolve: { recipe: RecipeResolver }
   }
@@ -32,7 +31,6 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
-    HttpClientModule,
     MaterialModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes)

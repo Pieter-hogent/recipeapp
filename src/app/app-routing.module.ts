@@ -4,7 +4,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: 'recipe/list', pathMatch: 'full' },
+  {
+    path: 'recipe',
+    loadChildren: () =>
+      import('./recipe/recipe.module').then(mod => mod.RecipeModule)
+  },
+  // { path: '', redirectTo: 'recipe/list', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
 

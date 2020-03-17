@@ -7,15 +7,17 @@ import { RecipeModule } from './recipe/recipe.module';
 import { MaterialModule } from './material/material.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { MainNavComponent } from './main-nav/main-nav.component';
-import { LayoutModule } from '@angular/cdk/layout';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent, MainNavComponent],
   imports: [
     BrowserModule,
-    RecipeModule,
+    BrowserAnimationsModule,
+    // RecipeModule,
     MaterialModule,
-    LayoutModule,
+    HttpClientModule,
     AppRoutingModule
   ],
   providers: [],
