@@ -17,10 +17,10 @@ export class RecipeDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    console.log(`render for ${id}`);
-    this.recipeDataService
-      .getRecipe$(id)
-      .subscribe(item => (this.recipe = item));
+    this.route.paramMap.subscribe(pa =>
+      this.recipeDataService
+        .getRecipe$(pa.get('id'))
+        .subscribe(item => (this.recipe = item))
+    );
   }
 }
