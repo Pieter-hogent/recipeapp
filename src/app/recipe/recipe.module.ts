@@ -9,7 +9,18 @@ import { RecipeFilterPipe } from './recipe-filter.pipe';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
+import { RecipeResolver } from './RecipeResolver';
+import { Routes, RouterModule } from '@angular/router';
 
+const routes: Routes = [
+  { path: 'recipe/list', component: RecipeListComponent },
+  { path: 'recipe/add', component: AddRecipeComponent },
+  {
+    path: 'recipe/detail/:id',
+    component: RecipeDetailComponent,
+    resolve: { recipe: RecipeResolver }
+  }
+];
 @NgModule({
   declarations: [
     RecipeComponent,
@@ -23,7 +34,8 @@ import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
     CommonModule,
     HttpClientModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule.forChild(routes)
   ],
   exports: [AddRecipeComponent, RecipeListComponent]
 })
