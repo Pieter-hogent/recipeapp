@@ -10,7 +10,7 @@ import { MainNavComponent } from './main-nav/main-nav.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserModule } from './user/user.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { httpInterceptorProviders } from './interceptors';
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent, MainNavComponent],
@@ -23,7 +23,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     UserModule,
     AppRoutingModule,
   ],
-  providers: [],
+  providers: [httpInterceptorProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

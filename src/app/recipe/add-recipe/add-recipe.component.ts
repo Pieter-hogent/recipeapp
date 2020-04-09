@@ -31,6 +31,7 @@ export class AddRecipeComponent implements OnInit {
   public readonly unitTypes = ['Liter', 'Gram', 'Tbsp', 'Pcs'];
   public recipe: FormGroup;
   public errorMessage: string = '';
+  public confirmationMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -90,7 +91,9 @@ export class AddRecipeComponent implements OnInit {
           return EMPTY;
         })
       )
-      .subscribe();
+      .subscribe((rec: Recipe) => {
+        this.confirmationMessage = `a recipe for ${rec.name} was successfully added`;
+      });
 
     this.recipe = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],

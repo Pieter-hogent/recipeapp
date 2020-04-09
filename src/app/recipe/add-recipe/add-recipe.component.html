@@ -69,3 +69,10 @@
 <mat-card class="error" *ngIf="errorMessage" data-cy="appError">
   got an error while adding the recipe: {{ errorMessage }}
 </mat-card>
+<mat-card
+  class="confirmation"
+  *ngIf="confirmationMessage"
+  data-cy="appConfirmation"
+>
+  {{ confirmationMessage }}
+</mat-card>

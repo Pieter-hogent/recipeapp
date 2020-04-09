@@ -14,11 +14,12 @@ function parseJwt(token) {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthenticationService {
   private readonly _tokenKey = 'currentUser';
   private _user$: BehaviorSubject<string>;
+  public redirectUrl: string = null;
 
   constructor(private http: HttpClient) {
     let parsedToken = parseJwt(localStorage.getItem(this._tokenKey));
@@ -78,7 +79,7 @@ export class AuthenticationService {
           lastname,
           email,
           password,
-          passwordConfirmation: password
+          passwordConfirmation: password,
         },
         { responseType: 'text' }
       )
@@ -106,7 +107,7 @@ export class AuthenticationService {
     return this.http.get<boolean>(
       `${environment.apiUrl}/account/checkusername`,
       {
-        params: { email }
+        params: { email },
       }
     );
   };
