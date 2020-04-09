@@ -1,0 +1,130 @@
+<div fxLayout="row" fxLayoutAlign="center center" class="login-main">
+  <mat-card>
+    <form [formGroup]="user" (ngSubmit)="onSubmit()">
+      <mat-card-header>
+        <mat-card-title>Register</mat-card-title>
+      </mat-card-header>
+      <mat-card-content fxLayout="column">
+        <span fxLayout="row" fxLayoutGap="2%">
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="first name"
+              aria-label="first name"
+              data-cy="register-firstname"
+              formControlName="firstname"
+            />
+            <mat-error
+              *ngIf="
+                user.get('firstname').errors && user.get('firstname').touched
+              "
+            >
+              {{ getErrorMessage(user.get('firstname').errors) }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="last name"
+              aria-label="last name"
+              data-cy="register-lastname"
+              formControlName="lastname"
+            />
+            <mat-error
+              *ngIf="
+                user.get('lastname').errors && user.get('lastname').touched
+              "
+            >
+              {{ getErrorMessage(user.get('lastname').errors) }}
+            </mat-error>
+          </mat-form-field>
+        </span>
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="email"
+            aria-label="email"
+            data-cy="register-email"
+            formControlName="email"
+          />
+          <mat-error
+            *ngIf="user.get('email').errors && user.get('email').touched"
+          >
+            {{ getErrorMessage(user.get('email').errors) }}
+          </mat-error>
+        </mat-form-field>
+        <span fxLayout="column" formGroupName="passwordGroup">
+          <mat-form-field>
+            <input
+              type="password"
+              matInput
+              placeholder="password"
+              aria-label="password"
+              data-cy="register-password"
+              formControlName="password"
+            />
+            <mat-error
+              *ngIf="
+                user.get('passwordGroup').get('password').errors &&
+                user.get('passwordGroup').get('password').touched
+              "
+            >
+              {{
+                getErrorMessage(
+                  user.get('passwordGroup').get('password').errors
+                )
+              }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              type="password"
+              matInput
+              placeholder="confirm password"
+              aria-label="confirm password"
+              data-cy="register-confirm-password"
+              formControlName="confirmPassword"
+            />
+            <mat-error
+              *ngIf="
+                user.get('passwordGroup').get('confirmPassword').errors &&
+                user.get('passwordGroup').get('confirmPassword').touched
+              "
+            >
+              {{
+                getErrorMessage(
+                  user.get('passwordGroup').get('confirmPassword').errors
+                )
+              }}
+            </mat-error>
+          </mat-form-field>
+          <mat-error
+            *ngIf="
+              user.get('passwordGroup').errors &&
+              user.get('passwordGroup').get('confirmPassword').touched &&
+              user.get('passwordGroup').get('password').touched
+            "
+          >
+            {{ getErrorMessage(user.get('passwordGroup').errors) }}
+          </mat-error>
+        </span>
+      </mat-card-content>
+
+      <mat-card-actions fxLayout="row" fxLayoutAlign="space-between center">
+        <a [routerLink]="['/login']">login</a>
+
+        <button
+          mat-raised-button
+          type="submit"
+          color="primary"
+          data-cy="register-button"
+        >
+          Register
+        </button>
+      </mat-card-actions>
+    </form>
+    <mat-card class="error" *ngIf="errorMessage" data-cy="appError">
+      got an error while loading the recipe list: {{ errorMessage }}
+    </mat-card>
+  </mat-card>
+</div>

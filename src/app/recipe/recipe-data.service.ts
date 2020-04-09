@@ -6,7 +6,7 @@ import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RecipeDataService {
   private _recipes$ = new BehaviorSubject<Recipe[]>([]);
@@ -15,7 +15,7 @@ export class RecipeDataService {
   constructor(private http: HttpClient) {
     this.recipes$
       .pipe(
-        catchError(err => {
+        catchError((err) => {
           // temporary fix, while we use the behaviorsubject as a cache stream
           this._recipes$.error(err);
           return throwError(err);
@@ -49,22 +49,18 @@ export class RecipeDataService {
   addNewRecipe(recipe: Recipe) {
     return this.http
       .post(`${environment.apiUrl}/recipes/`, recipe.toJSON())
-      .pipe(
-        tap(console.log),
-        catchError(this.handleError),
-        map(Recipe.fromJSON)
-      )
+      .pipe(catchError(this.handleError), map(Recipe.fromJSON))
       .pipe(
         // temporary fix, while we use the behaviorsubject as a cache stream
-        catchError(err => {
+        catchError((err) => {
           this._recipes$.error(err);
           return throwError(err);
+        }),
+        tap((rec: Recipe) => {
+          this._recipes = [...this._recipes, rec];
+          this._recipes$.next(this._recipes);
         })
-      )
-      .subscribe((rec: Recipe) => {
-        this._recipes = [...this._recipes, rec];
-        this._recipes$.next(this._recipes);
-      });
+      );
   }
 
   deleteRecipe(recipe: Recipe) {
@@ -72,7 +68,7 @@ export class RecipeDataService {
       .delete(`${environment.apiUrl}/recipes/${recipe.id}`)
       .pipe(tap(console.log), catchError(this.handleError))
       .subscribe(() => {
-        this._recipes = this._recipes.filter(rec => rec.id != recipe.id);
+        this._recipes = this._recipes.filter((rec) => rec.id != recipe.id);
         this._recipes$.next(this._recipes);
       });
   }

@@ -66,3 +66,6 @@
     </form>
   </mat-card-content>
 </mat-card>
+<mat-card class="error" *ngIf="errorMessage" data-cy="appError">
+  got an error while adding the recipe: {{ errorMessage }}
+</mat-card>

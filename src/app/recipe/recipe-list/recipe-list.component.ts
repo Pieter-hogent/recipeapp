@@ -8,13 +8,13 @@ import {
   map,
   filter,
   catchError,
-  scan
+  scan,
 } from 'rxjs/operators';
 
 @Component({
   selector: 'app-recipe-list',
   templateUrl: './recipe-list.component.html',
-  styleUrls: ['./recipe-list.component.css']
+  styleUrls: ['./recipe-list.component.css'],
 })
 export class RecipeListComponent implements OnInit {
   public filterRecipeName: string;
@@ -28,15 +28,14 @@ export class RecipeListComponent implements OnInit {
       .pipe(
         distinctUntilChanged(),
         debounceTime(400),
-        map(val => val.toLowerCase())
+        map((val) => val.toLowerCase())
       )
-      .subscribe(val => (this.filterRecipeName = val));
+      .subscribe((val) => (this.filterRecipeName = val));
   }
 
   ngOnInit(): void {
-    console.log('loading recipe.list');
     this._fetchRecipes$ = this._recipeDataService.allRecipes$.pipe(
-      catchError(err => {
+      catchError((err) => {
         this.errorMessage = err;
         return EMPTY;
       })

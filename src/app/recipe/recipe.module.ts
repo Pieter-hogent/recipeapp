@@ -6,10 +6,10 @@ import { CommonModule } from '@angular/common';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
 import { AddRecipeComponent } from './add-recipe/add-recipe.component';
 import { RecipeFilterPipe } from './recipe-filter.pipe';
-import { ReactiveFormsModule } from '@angular/forms';
 import { RecipeDetailComponent } from './recipe-detail/recipe-detail.component';
 import { RecipeResolver } from './RecipeResolver';
 import { Routes, RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: 'list', component: RecipeListComponent },
@@ -17,8 +17,8 @@ const routes: Routes = [
   {
     path: 'detail/:id',
     component: RecipeDetailComponent,
-    resolve: { recipe: RecipeResolver }
-  }
+    resolve: { recipe: RecipeResolver },
+  },
 ];
 @NgModule({
   declarations: [
@@ -27,14 +27,14 @@ const routes: Routes = [
     RecipeListComponent,
     AddRecipeComponent,
     RecipeFilterPipe,
-    RecipeDetailComponent
+    RecipeDetailComponent,
   ],
   imports: [
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
   ],
-  exports: [AddRecipeComponent, RecipeListComponent]
+  exports: [AddRecipeComponent, RecipeListComponent],
 })
 export class RecipeModule {}

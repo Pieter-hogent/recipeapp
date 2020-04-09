@@ -9,18 +9,21 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { MainNavComponent } from './main-nav/main-nav.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UserModule } from './user/user.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent, MainNavComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    // RecipeModule,
+    RecipeModule,
     MaterialModule,
     HttpClientModule,
-    AppRoutingModule
+    UserModule,
+    AppRoutingModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

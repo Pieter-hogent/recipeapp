@@ -6,10 +6,11 @@ import {
   FormControl,
   Validators,
   FormBuilder,
-  FormArray
+  FormArray,
 } from '@angular/forms';
 import { Ingredient } from '../ingredient.model';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, catchError } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
 
 function validateIngredientName(control: FormGroup): { [key: string]: any } {
   if (
@@ -24,11 +25,12 @@ function validateIngredientName(control: FormGroup): { [key: string]: any } {
 @Component({
   selector: 'app-add-recipe',
   templateUrl: './add-recipe.component.html',
-  styleUrls: ['./add-recipe.component.css']
+  styleUrls: ['./add-recipe.component.css'],
 })
 export class AddRecipeComponent implements OnInit {
   public readonly unitTypes = ['Liter', 'Gram', 'Tbsp', 'Pcs'];
   public recipe: FormGroup;
+  public errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -41,12 +43,12 @@ export class AddRecipeComponent implements OnInit {
   ngOnInit() {
     this.recipe = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
-      ingredients: this.fb.array([this.createIngredients()])
+      ingredients: this.fb.array([this.createIngredients()]),
     });
 
     this.ingredients.valueChanges
       .pipe(debounceTime(400), distinctUntilChanged())
-      .subscribe(ingList => {
+      .subscribe((ingList) => {
         // if the last entry's name is typed, add a new empty one
         // if we're removing an entry's name, and there is an empty one after that one, remove the empty one
         const lastElement = ingList[ingList.length - 1];
@@ -72,20 +74,27 @@ export class AddRecipeComponent implements OnInit {
       {
         amount: [''],
         unit: [''],
-        name: ['']
+        name: [''],
       },
       { validator: validateIngredientName }
     );
   }
   onSubmit() {
     let ingredients = this.recipe.value.ingredients.map(Ingredient.fromJSON);
-    ingredients = ingredients.filter(ing => ing.name.length > 2);
-    this._recipeDataService.addNewRecipe(
-      new Recipe(this.recipe.value.name, ingredients)
-    );
+    ingredients = ingredients.filter((ing) => ing.name.length > 2);
+    this._recipeDataService
+      .addNewRecipe(new Recipe(this.recipe.value.name, ingredients))
+      .pipe(
+        catchError((err) => {
+          this.errorMessage = err;
+          return EMPTY;
+        })
+      )
+      .subscribe();
+
     this.recipe = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
-      ingredients: this.fb.array([this.createIngredients()])
+      ingredients: this.fb.array([this.createIngredients()]),
     });
   }
 
