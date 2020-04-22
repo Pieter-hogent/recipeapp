@@ -7,13 +7,14 @@
         placeholder="filter"
         type="text"
         data-cy="filterInput"
+        [value]="filterRecipeName"
       />
     </mat-form-field>
   </mat-card>
   <mat-card class="error" *ngIf="errorMessage" data-cy="appError">
     got an error while loading the recipe list: {{ errorMessage }}
   </mat-card>
-  <div *ngIf="recipes$ | async as recipes; else loadingOrError">
+  <div *ngIf="recipes; else loadingOrError">
     <div
       fxLayout="row wrap"
       fxLayout.xs="column"
@@ -22,7 +23,7 @@
     >
       <div
         class="recipe"
-        *ngFor="let recipe of recipes | recipeFilter: filterRecipeName"
+        *ngFor="let recipe of recipes"
         fxFlex="0 0 calc(25%-0.5%)"
         fxFlex.xs="100%"
       >

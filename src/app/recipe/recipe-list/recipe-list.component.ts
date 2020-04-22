@@ -9,7 +9,9 @@ import {
   filter,
   catchError,
   scan,
+  tap,
 } from 'rxjs/operators';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-recipe-list',
@@ -17,36 +19,57 @@ import {
   styleUrls: ['./recipe-list.component.css'],
 })
 export class RecipeListComponent implements OnInit {
-  public filterRecipeName: string;
+  public filterRecipeName: string = '';
+  public recipes: Recipe[];
   public filterRecipe$ = new Subject<string>();
-  private _fetchRecipes$: Observable<Recipe[]>;
+  // private _fetchRecipes$: Observable<Recipe[]>;
 
   public errorMessage: string = '';
 
-  constructor(private _recipeDataService: RecipeDataService) {
+  constructor(
+    private _recipeDataService: RecipeDataService,
+    private _router: Router,
+    private _route: ActivatedRoute
+  ) {
     this.filterRecipe$
-      .pipe(
-        distinctUntilChanged(),
-        debounceTime(400),
-        map((val) => val.toLowerCase())
-      )
-      .subscribe((val) => (this.filterRecipeName = val));
+      .pipe(distinctUntilChanged(), debounceTime(250))
+      .subscribe((val) => {
+        const params = val ? { queryParams: { filter: val } } : undefined;
+        this._router.navigate(['/recipe/list'], params);
+      });
+
+    this._route.queryParams.subscribe((params) => {
+      this._recipeDataService
+        .getRecipes$(params['filter'])
+        .pipe(
+          catchError((err) => {
+            this.errorMessage = err;
+            return EMPTY;
+          })
+        )
+        .subscribe((val) => {
+          this.recipes = val;
+        });
+      if (params['filter']) {
+        this.filterRecipeName = params['filter'];
+      }
+    });
   }
 
   ngOnInit(): void {
-    this._fetchRecipes$ = this._recipeDataService.allRecipes$.pipe(
-      catchError((err) => {
-        this.errorMessage = err;
-        return EMPTY;
-      })
-    );
+    // this._fetchRecipes$ = this._recipeDataService.allRecipes$.pipe(
+    //   catchError((err) => {
+    //     this.errorMessage = err;
+    //     return EMPTY;
+    //   })
+    // );
   }
 
   applyFilter(filter: string) {
     this.filterRecipeName = filter;
   }
 
-  get recipes$(): Observable<Recipe[]> {
-    return this._fetchRecipes$;
-  }
+  // get recipes$(): Observable<Recipe[]> {
+  //   return this._fetchRecipes$;
+  // }
 }

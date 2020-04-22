@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
 function patternValidator(regex: RegExp, error: ValidationErrors): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: any } => {
+  return (control: AbstractControl): ValidationErrors => {
     if (!control.value) {
       return null;
     }
@@ -26,7 +26,7 @@ function patternValidator(regex: RegExp, error: ValidationErrors): ValidatorFn {
   };
 }
 
-function comparePasswords(control: AbstractControl): { [key: string]: any } {
+function comparePasswords(control: AbstractControl): ValidationErrors {
   const password = control.get('password');
   const confirmPassword = control.get('confirmPassword');
   return password.value === confirmPassword.value
@@ -37,7 +37,7 @@ function comparePasswords(control: AbstractControl): { [key: string]: any } {
 function serverSideValidateUsername(
   checkAvailabilityFn: (n: string) => Observable<boolean>
 ): ValidatorFn {
-  return (control: AbstractControl): Observable<{ [key: string]: any }> => {
+  return (control: AbstractControl): Observable<ValidationErrors> => {
     return checkAvailabilityFn(control.value).pipe(
       map((available) => {
         if (available) {

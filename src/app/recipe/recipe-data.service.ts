@@ -1,5 +1,9 @@
 import { Injectable, OnInit } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { map, catchError, tap, shareReplay, switchMap } from 'rxjs/operators';
 import { Recipe } from './recipe.model';
 import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
@@ -44,6 +48,17 @@ export class RecipeDataService {
     return this.http
       .get(`${environment.apiUrl}/recipes/${id}`)
       .pipe(catchError(this.handleError), map(Recipe.fromJSON)); // returns just one recipe, as json
+  }
+
+  getRecipes$(name?: string, chef?: string, ingredient?: string) {
+    let params = new HttpParams();
+    params = name ? params.append('name', name) : params;
+    params = chef ? params.append('chef', chef) : params;
+    params = ingredient ? params.append('ingredientName', ingredient) : params;
+    return this.http.get(`${environment.apiUrl}/recipes/`, { params }).pipe(
+      catchError(this.handleError),
+      map((list: any[]): Recipe[] => list.map(Recipe.fromJSON))
+    );
   }
 
   addNewRecipe(recipe: Recipe) {
