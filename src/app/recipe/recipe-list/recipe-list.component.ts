@@ -10,6 +10,7 @@ import {
   catchError,
   scan,
   tap,
+  switchMap,
 } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -38,38 +39,33 @@ export class RecipeListComponent implements OnInit {
         this._router.navigate(['/recipe/list'], params);
       });
 
-    this._route.queryParams.subscribe((params) => {
-      this._recipeDataService
-        .getRecipes$(params['filter'])
-        .pipe(
-          catchError((err) => {
-            this.errorMessage = err;
-            return EMPTY;
-          })
-        )
-        .subscribe((val) => {
-          this.recipes = val;
-        });
-      if (params['filter']) {
-        this.filterRecipeName = params['filter'];
-      }
-    });
+    this._route.queryParams
+      .pipe(
+        switchMap((newParams) => {
+          // set the value of the input field with the url parameter as well
+          if (newParams['filter']) {
+            this.filterRecipeName = newParams['filter'];
+          }
+          // when the queryparameter changes, take the filter parameter and use it to ask
+          // the service for all recipes with this filter in their name
+          // this._recipeDataService.getRecipes$(params['filter']).subscribe(
+          return this._recipeDataService.getRecipes$(newParams['filter']);
+        })
+      )
+      .pipe(
+        catchError((err) => {
+          this.errorMessage = err;
+          return EMPTY;
+        })
+      )
+      .subscribe((val) => {
+        this.recipes = val;
+      });
   }
 
-  ngOnInit(): void {
-    // this._fetchRecipes$ = this._recipeDataService.allRecipes$.pipe(
-    //   catchError((err) => {
-    //     this.errorMessage = err;
-    //     return EMPTY;
-    //   })
-    // );
-  }
+  ngOnInit(): void {}
 
   applyFilter(filter: string) {
     this.filterRecipeName = filter;
   }
-
-  // get recipes$(): Observable<Recipe[]> {
-  //   return this._fetchRecipes$;
-  // }
 }
