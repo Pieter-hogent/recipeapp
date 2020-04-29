@@ -1,11 +1,11 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title
-      ><mat-icon>local_dining</mat-icon> {{ recipe.name }}
+    <mat-card-title data-cy="recipe-title">
+      <mat-icon>local_dining</mat-icon> {{ recipe.name }}
     </mat-card-title>
-    <mat-card-subtitle
-      >added on {{ recipe.dateAdded | date: 'longDate' }}</mat-card-subtitle
-    >
+    <mat-card-subtitle>
+      added on {{ recipe.dateAdded | date: 'longDate' }}
+    </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <h3 mat-subheader>ingredients</h3>

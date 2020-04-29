@@ -1,0 +1,28 @@
+[
+  {
+    "id": 2,
+    "name": "Lasagna",
+    "created": "2019-02-07T12:40:03.184905",
+    "chef": null,
+    "ingredients": [
+      {
+        "id": 1,
+        "name": "Tomatoes",
+        "amount": 0.75,
+        "unit": "liter"
+      },
+      {
+        "id": 2,
+        "name": "Minced Meat",
+        "amount": 500.0,
+        "unit": "grams"
+      },
+      {
+        "id": 3,
+        "name": "Butter",
+        "amount": 100,
+        "unit": "grams"
+      }
+    ]
+  }
+]
