@@ -14,7 +14,7 @@
   <mat-card class="error" *ngIf="errorMessage" data-cy="appError">
     got an error while loading the recipe list: {{ errorMessage }}
   </mat-card>
-  <div *ngIf="recipes; else loadingOrError">
+  <div *ngIf="recipes$ | async as recipes; else loadingOrError">
     <div
       fxLayout="row wrap"
       fxLayout.xs="column"

@@ -21,9 +21,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class RecipeListComponent implements OnInit {
   public filterRecipeName: string = '';
-  public recipes: Recipe[];
   public filterRecipe$ = new Subject<string>();
-  // private _fetchRecipes$: Observable<Recipe[]>;
+  private _fetchRecipes$: Observable<Recipe[]>;
 
   public errorMessage: string = '';
 
@@ -39,7 +38,7 @@ export class RecipeListComponent implements OnInit {
         this._router.navigate(['/recipe/list'], params);
       });
 
-    this._route.queryParams
+    this._fetchRecipes$ = this._route.queryParams
       .pipe(
         switchMap((newParams) => {
           // set the value of the input field with the url parameter as well
@@ -57,15 +56,16 @@ export class RecipeListComponent implements OnInit {
           this.errorMessage = err;
           return EMPTY;
         })
-      )
-      .subscribe((val) => {
-        this.recipes = val;
-      });
+      );
   }
 
   ngOnInit(): void {}
 
   applyFilter(filter: string) {
     this.filterRecipeName = filter;
+  }
+
+  get recipes$(): Observable<Recipe[]> {
+    return this._fetchRecipes$;
   }
 }
