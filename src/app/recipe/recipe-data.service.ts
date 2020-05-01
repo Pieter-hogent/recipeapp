@@ -13,27 +13,9 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class RecipeDataService {
-  private _recipes$ = new BehaviorSubject<Recipe[]>([]);
-  private _recipes: Recipe[];
+  private _reloadRecipes$ = new BehaviorSubject<boolean>(true);
 
-  constructor(private http: HttpClient) {
-    this.recipes$
-      .pipe(
-        catchError((err) => {
-          // temporary fix, while we use the behaviorsubject as a cache stream
-          this._recipes$.error(err);
-          return throwError(err);
-        })
-      )
-      .subscribe((recipes: Recipe[]) => {
-        this._recipes = recipes;
-        this._recipes$.next(this._recipes);
-      });
-  }
-
-  get allRecipes$(): Observable<Recipe[]> {
-    return this._recipes$;
-  }
+  constructor(private http: HttpClient) {}
 
   get recipes$(): Observable<Recipe[]> {
     return this.http.get(`${environment.apiUrl}/recipes/`).pipe(
@@ -51,6 +33,12 @@ export class RecipeDataService {
   }
 
   getRecipes$(name?: string, chef?: string, ingredient?: string) {
+    return this._reloadRecipes$.pipe(
+      switchMap(() => this.fetchRecipes$(name, chef, ingredient))
+    );
+  }
+
+  fetchRecipes$(name?: string, chef?: string, ingredient?: string) {
     let params = new HttpParams();
     params = name ? params.append('name', name) : params;
     params = chef ? params.append('chef', chef) : params;
@@ -68,12 +56,10 @@ export class RecipeDataService {
       .pipe(
         // temporary fix, while we use the behaviorsubject as a cache stream
         catchError((err) => {
-          this._recipes$.error(err);
           return throwError(err);
         }),
         tap((rec: Recipe) => {
-          this._recipes = [...this._recipes, rec];
-          this._recipes$.next(this._recipes);
+          this._reloadRecipes$.next(true);
         })
       );
   }
@@ -83,8 +69,7 @@ export class RecipeDataService {
       .delete(`${environment.apiUrl}/recipes/${recipe.id}`)
       .pipe(tap(console.log), catchError(this.handleError))
       .subscribe(() => {
-        this._recipes = this._recipes.filter((rec) => rec.id != recipe.id);
-        this._recipes$.next(this._recipes);
+        this._reloadRecipes$.next(true);
       });
   }
 

@@ -26,6 +26,7 @@
         *ngFor="let recipe of recipes"
         fxFlex="0 0 calc(25%-0.5%)"
         fxFlex.xs="100%"
+        data-cy="recipeList"
       >
         <app-recipe [recipe]="recipe" data-cy="recipeCard"></app-recipe>
       </div>
