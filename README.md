@@ -1,3 +1,5 @@
+THIS COURSE IS NO LONGER BEING UPDATED
+
 # Recipeapp
 
 this is the example app used in the webapplications 4 course at hogent
